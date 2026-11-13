@@ -16,95 +16,162 @@ const hugBtn = document.getElementById("hugBtn");
 
 const meterFill = document.getElementById("meterFill");
 
+const nextBtns = document.querySelectorAll(".next");
+
+
+/* ==========================================
+   CURRENT PAGE
+========================================== */
+
 let currentPage = 1;
+
 
 /* ==========================================
    SHOW PAGE
 ========================================== */
 
-function showPage(id){
+function showPage(id) {
 
-    pages.forEach(page=>{
+    pages.forEach(page => {
 
         page.classList.remove("active");
 
     });
 
-    document.getElementById(id).classList.add("active");
+    const targetPage = document.getElementById(id);
+
+    if (targetPage) {
+
+        targetPage.classList.add("active");
+
+    }
 
 }
+
 
 /* ==========================================
    MUSIC
 ========================================== */
 
-document.body.addEventListener("click",()=>{
+document.body.addEventListener("click", () => {
 
-    bgm.play();
+    if (bgm) {
 
-},{once:true});
+        bgm.play().catch(() => {});
+
+    }
+
+}, { once: true });
+
 
 /* ==========================================
-   PAGE 1 -> PAGE 2
+   PAGE 1 → PAGE 2
 ========================================== */
 
-startBtn.addEventListener("click",()=>{
+if (startBtn) {
 
-    showPage("page2");
+    startBtn.addEventListener("click", () => {
 
-});
+        currentPage = 2;
+
+        showPage("page2");
+
+    });
+
+}
+
 
 /* ==========================================
+   PAGE 2 → PAGE 3
    ENVELOPE
 ========================================== */
 
-envelope.addEventListener("click",()=>{
+if (envelope) {
 
-    envelope.classList.add("open");
+    envelope.addEventListener("click", () => {
 
-    meterFill.style.width="25%";
+        envelope.classList.add("open");
 
-    setTimeout(()=>{
+        if (meterFill) {
 
-        showPage("page3");
+            meterFill.style.width = "25%";
 
-    },1200);
+        }
 
-});
+        setTimeout(() => {
+
+            currentPage = 3;
+
+            showPage("page3");
+
+        }, 1200);
+
+    });
+
+}
+
 
 /* ==========================================
    NEXT BUTTON
 ========================================== */
 
-const nextBtns=document.querySelectorAll(".next");
+nextBtns.forEach(btn => {
 
-nextBtns.forEach(btn=>{
+    btn.addEventListener("click", () => {
 
-    btn.addEventListener("click",()=>{
+        /* ==============================
+           PAGE 3 → PAGE 4
+        ============================== */
 
-        if(currentPage==1){
+        if (currentPage === 3) {
+
+            currentPage = 4;
 
             showPage("page4");
 
-            currentPage++;
-
         }
 
-        else if(currentPage==2){
+
+        /* ==============================
+           PAGE 4 → PAGE 5
+           FOTO
+        ============================== */
+
+        else if (currentPage === 4) {
+
+            currentPage = 5;
 
             showPage("page5");
 
-            currentPage++;
-
         }
 
-        else if(currentPage==3){
+
+        /* ==============================
+           PAGE 5 → PAGE 6
+           FOTO → SURAT
+        ============================== */
+
+        else if (currentPage === 5) {
+
+            currentPage = 6;
 
             showPage("page6");
 
-            currentPage++;
-
             heartRain();
+
+        }
+
+
+        /* ==============================
+           PAGE 6 → PAGE 7
+           SURAT → ENDING
+        ============================== */
+
+        else if (currentPage === 6) {
+
+            currentPage = 7;
+
+            showPage("page7");
 
         }
 
@@ -112,90 +179,121 @@ nextBtns.forEach(btn=>{
 
 });
 
+
 /* ==========================================
    RESTART
 ========================================== */
 
-restartBtn.addEventListener("click",()=>{
+if (restartBtn) {
 
-    currentPage=1;
+    restartBtn.addEventListener("click", () => {
 
-    envelope.classList.remove("open");
+        currentPage = 1;
 
-    meterFill.style.width="0%";
+        if (envelope) {
 
-    showPage("page1");
+            envelope.classList.remove("open");
 
-});
+        }
+
+        if (meterFill) {
+
+            meterFill.style.width = "0%";
+
+        }
+
+        showPage("page1");
+
+    });
+
+}
+
 
 /* ==========================================
    HEART RAIN
 ========================================== */
 
-function heartRain(){
+function heartRain() {
 
-    for(let i=0;i<80;i++){
+    for (let i = 0; i < 80; i++) {
 
-        setTimeout(()=>{
+        setTimeout(() => {
 
             createHeart();
 
-        },i*80);
+        }, i * 80);
 
     }
 
 }
 
+
 /* ==========================================
-   HEART
+   CREATE HEART
 ========================================== */
 
-function createHeart(){
+function createHeart() {
 
-    const heart=document.createElement("div");
+    const heart = document.createElement("div");
 
-    heart.className="heart";
+    heart.className = "heart";
 
-    heart.innerHTML="💗";
+    heart.innerHTML = "💗";
 
-    heart.style.left=Math.random()*100+"vw";
+    heart.style.left =
+        Math.random() * 100 + "vw";
 
-    heart.style.fontSize=(18+Math.random()*22)+"px";
+    heart.style.fontSize =
+        (18 + Math.random() * 22) + "px";
 
-    heart.style.animationDuration=(5+Math.random()*5)+"s";
+    heart.style.animationDuration =
+        (5 + Math.random() * 5) + "s";
 
     document.body.appendChild(heart);
 
-    setTimeout(()=>{
+
+    setTimeout(() => {
 
         heart.remove();
 
-    },9000);
+    }, 9000);
 
 }
 
+
 /* ==========================================
-   FLOAT HEARTS
+   FLOATING HEARTS
 ========================================== */
 
-setInterval(()=>{
+setInterval(() => {
 
     createHeart();
 
-},1200);
+}, 1200);
+
 
 /* ==========================================
    HUG BUTTON
 ========================================== */
 
-hugBtn.addEventListener("click",()=>{
+if (hugBtn) {
 
-    for(let i=0;i<30;i++){
+    hugBtn.addEventListener("click", () => {
 
-        setTimeout(createHeart,i*60);
+        for (let i = 0; i < 30; i++) {
 
-    }
+            setTimeout(() => {
 
-    alert("Makasih ya sayang...Aku bakal berusaha jadi lebih baik🤍");
+                createHeart();
 
-});
+            }, i * 60);
+
+        }
+
+        alert(
+            "Makasih ya sayangg... Aku bakal berusaha jadi lebih baik 🤍"
+        );
+
+    });
+
+}
